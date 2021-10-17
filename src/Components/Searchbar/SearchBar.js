@@ -1,5 +1,5 @@
 import { Component } from "react";
-
+import PropTypes from "prop-types";
 import { ImSearch } from "react-icons/im";
 
 export default class SearchBar extends Component {
@@ -22,9 +22,10 @@ export default class SearchBar extends Component {
   };
 
   render() {
+    const { handleSubmit, handleValueChange } = this;
     return (
       <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.handleSubmit}>
+        <form className="SearchForm" onSubmit={handleSubmit}>
           <button type="submit" className="SearchForm-button">
             <ImSearch style={{ marginRight: 8 }} />
           </button>
@@ -36,10 +37,14 @@ export default class SearchBar extends Component {
             autoFocus
             placeholder="Search images and photos"
             value={this.state.inputValue}
-            onChange={this.handleValueChange}
+            onChange={handleValueChange}
           />
         </form>
       </header>
     );
   }
 }
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func,
+};

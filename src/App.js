@@ -1,5 +1,5 @@
 import { Component } from "react";
-import Searchbar from "./Components/Searchbar/SearchBar";
+import Searchbar from "./Components/Searchbar";
 import ImageGallery from "./Components/ImageGallery";
 
 export default class App extends Component {
