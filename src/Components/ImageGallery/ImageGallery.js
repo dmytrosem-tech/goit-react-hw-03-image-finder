@@ -19,15 +19,28 @@ export default class ImageGallery extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { baseApi, myApiKey, page } = this.state;
+    const { baseApi, myApiKey, page, pictures } = this.state;
     const prevInputValue = prevProps.inputValue;
     const nextInputValue = this.props.inputValue;
     const prevPage = prevState.page;
     const nextPage = this.state.page;
 
-    if (prevInputValue !== nextInputValue || prevPage !== nextPage) {
+    if (prevInputValue !== nextInputValue) {
       this.setState({ status: "pending" });
 
+      this.setState({ pictures: [] });
+
+      fetchPictures(nextInputValue, baseApi, myApiKey, page)
+        .then((pictures) => {
+          if (pictures.length === 0) {
+            return this.setState({ status: "rejected" });
+          }
+
+          this.getPictures(pictures);
+        })
+        .then(this.setState({ status: "resolved" }))
+        .catch((error) => this.setState({ error, status: "rejected" }));
+    } else if (prevPage !== nextPage) {
       fetchPictures(nextInputValue, baseApi, myApiKey, page)
         .then((pictures) => {
           if (pictures.length === 0) {
@@ -53,16 +66,17 @@ export default class ImageGallery extends Component {
     this.setState({
       pictures: [...this.state.pictures, ...newArr],
     });
-
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
+    console.log(window.document.documentElement);
   };
 
   onLoadMoreClick = () => {
     this.setState({
       page: this.state.page + 1,
+    });
+    console.log(window.document.documentElement);
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
     });
   };
 
